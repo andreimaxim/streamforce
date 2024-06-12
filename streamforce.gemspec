@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary = "Small wrapper over the Salesforce Streaming API"
   spec.homepage = "https://github.com/andreimaxim/streamforce"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 3.0.0"
+  spec.required_ruby_version = ">= 3.3.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage 
@@ -30,8 +30,10 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  spec.add_dependency "base64"
+  spec.add_dependency "zeitwerk"
   spec.add_dependency "faye"
-  spec.add_dependency "redis"
+  spec.add_dependency "relaxed_cookiejar"
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html
