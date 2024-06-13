@@ -3,4 +3,4 @@
 $LOAD_PATH.unshift File.expand_path("../lib", __dir__)
 require "streamforce"
 
-require "minitest/autorun"
+require "active_support/testing/autorun"

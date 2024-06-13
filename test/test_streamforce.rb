@@ -2,8 +2,8 @@
 
 require "test_helper"
 
-class TestStreamforce < Minitest::Test
-  def test_that_it_has_a_version_number
-    refute_nil ::Streamforce::VERSION
+class TestStreamforce < ActiveSupport::TestCase
+  test "it has a version number" do
+    assert_not_nil ::Streamforce::VERSION
   end
 end

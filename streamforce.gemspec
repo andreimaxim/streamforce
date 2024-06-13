@@ -34,6 +34,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "zeitwerk"
   spec.add_dependency "faye"
   spec.add_dependency "relaxed_cookiejar"
+  spec.add_dependency "activesupport"
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html
