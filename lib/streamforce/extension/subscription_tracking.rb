@@ -39,13 +39,13 @@ class Streamforce::Extension::SubscriptionTracking
     payload = message["data"].to_json
 
     type = case channel.split("/")[1]
-           when "topic"
+    when "topic"
              "PushTopic"
-           when "event"
+    when "event"
              "PlatformEvent"
-           else
+    else
              "Unknown"
-           end
+    end
 
     name = channel.split("/")[2]
 

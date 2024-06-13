@@ -74,6 +74,6 @@ class Streamforce::Client
 
     client
       .subscribe(channels.shift, &blk)
-      .callback { subscribe_to_channels(client, channels, &blk)}
+      .callback { subscribe_to_channels(client, channels, &blk) }
   end
 end

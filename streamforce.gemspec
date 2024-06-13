@@ -5,8 +5,8 @@ require_relative "lib/streamforce/version"
 Gem::Specification.new do |spec|
   spec.name = "streamforce"
   spec.version = Streamforce::VERSION
-  spec.authors = ["Andrei Maxim"]
-  spec.email = ["andrei@andreimaxim.ro"]
+  spec.authors = [ "Andrei Maxim" ]
+  spec.email = [ "andrei@andreimaxim.ro" ]
 
   spec.summary = "Small wrapper over the Salesforce Streaming API"
   spec.homepage = "https://github.com/andreimaxim/streamforce"
@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = ">= 3.3.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = spec.homepage 
+  spec.metadata["source_code_uri"] = spec.homepage
   spec.metadata["changelog_uri"] = "https://github.com/andreimaxim/streamforce/blob/main/CHANGELOG.md"
 
   # Specify which files should be added to the gem when it is released.
@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
   end
   spec.bindir = "exe"
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
-  spec.require_paths = ["lib"]
+  spec.require_paths = [ "lib" ]
 
   spec.add_dependency "base64"
   spec.add_dependency "zeitwerk"
