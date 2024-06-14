@@ -1,5 +1,5 @@
 class Streamforce::Extension::Logging
-  def initialize(log_level = Logger::DEBUG)
+  def initialize(log_level = Logger::INFO)
     @logger = Logger.new($stdout)
     @logger.level = log_level
   end

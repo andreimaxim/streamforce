@@ -1,5 +1,5 @@
 class Streamforce::Extension::SubscriptionTracking
-  def initialize(log_level = Logger::DEBUG)
+  def initialize(log_level = Logger::INFO)
     @logger = Logger.new($stdout)
     @logger.level = log_level
 
@@ -40,11 +40,11 @@ class Streamforce::Extension::SubscriptionTracking
 
     type = case channel.split("/")[1]
     when "topic"
-             "PushTopic"
+      "PushTopic"
     when "event"
-             "PlatformEvent"
+      "PlatformEvent"
     else
-             "Unknown"
+      "Unknown"
     end
 
     name = channel.split("/")[2]
