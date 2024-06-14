@@ -8,5 +8,5 @@ client = Streamforce::Client.new
 subscriptions = ENV["SALESFORCE_SUBSCRIPTIONS"].split(",")
 
 client.subscribe(subscriptions) do |subscription, message|
-  puts "[#{subscription}]: #{message.inspect}"
+  puts "[Client log][#{subscription}]: #{message.inspect}"
 end
