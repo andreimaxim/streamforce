@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+require "streamforce"
+
+client = Streamforce::Client.new
+subscriptions = ENV["SALESFORCE_SUBSCRIPTIONS"].split(",")
+
+client.subscribe(subscriptions) do |subscription, message|
+  puts "[#{subscription}]: #{message.inspect}"
+end
