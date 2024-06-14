@@ -49,7 +49,7 @@ class Streamforce::Extension::SubscriptionTracking
 
     name = channel.split("/")[2]
 
-    @logger.info "[#{type}][#{name}]: #{payload}" if @subscriptions.include?(channel)
+    @logger.debug "[#{type}][#{name}]: #{payload}" if @subscriptions.include?(channel)
   end
 
   def subscription?(message)
