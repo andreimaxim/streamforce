@@ -1,67 +1,57 @@
 class Streamforce::Client
-  class << self
-    def host
-      ENV["SALESFORCE_HOST"]
-    end
+  attr_reader :host, :username, :password, :client_id, :client_secret, :security_token,
+    :api_version
 
-    def client_id
-      ENV["SALESFORCE_CLIENT_ID"]
-    end
-
-    def client_secret
-      ENV["SALESFORCE_CLIENT_SECRET"]
-    end
-
-    def username
-      ENV["SALESFORCE_USERNAME"]
-    end
-
-    def password
-      ENV["SALESFORCE_PASSWORD"]
-    end
-
-    def security_token
-      ENV["SALESFORCE_SECURITY_TOKEN"]
-    end
-
-    def version
-      ENV.fetch("SALESFORCE_API_VERSION", "61.0")
-    end
-
-    def authentication_url
-      URI.parse("https://#{host}/services/oauth2/token")
-    end
-
-    def authentication_params
-      {
-        grant_type: "password",
-        client_id: client_id,
-        client_secret: client_secret,
-        username: username,
-        password: "#{password}#{security_token}"
-      }
-    end
-  end
-
-  def set_authentication_credentials!
-    response = Net::HTTP.post_form(Streamforce::Client.authentication_url, Streamforce::Client.authentication_params)
-    credentials = JSON.parse(response.body)
-
-    @access_token = credentials["access_token"]
-    @instance_url = "#{credentials["instance_url"]}/cometd/#{Streamforce::Client.version}"
+  def initialize(opts = {})
+    @host           = opts.fetch(:host, ENV["SALESFORCE_HOST"])
+    @username       = opts.fetch(:username, ENV["SALESFORCE_USERNAME"])
+    @password       = opts.fetch(:password, ENV["SALESFORCE_PASSWORD"])
+    @client_id      = opts.fetch(:client_id, ENV["SALESFORCE_CLIENT_ID"])
+    @client_secret  = opts.fetch(:client_secret, ENV["SALESFORCE_CLIENT_SECRET"])
+    @security_token = opts.fetch(:security_token, ENV["SALESFORCE_SECURITY_TOKEN"])
+    @api_version    = opts.fetch(:api_version, ENV["SALESFORCE_API_VERSION"])
   end
 
   def subscribe(channels = [], &blk)
-    channels = Array(channels)
+    EM.run { subscribe_to_channels(faye, Array(channels), &blk) }
+  end
 
-    set_authentication_credentials!
+  private
 
-    EM.run { subscribe_to_channels(faye, channels, &blk) }
+  def instance_url
+    authentication["instance_url"]
+  end
+
+  def access_token
+    authentication["access_token"]
+  end
+
+  def authentication_url
+    URI.parse("https://#{host}/services/oauth2/token")
+  end
+
+  def authentication_params
+    {
+      grant_type: "password",
+      username: username,
+      password: "#{password}#{security_token}",
+      client_id: client_id,
+      client_secret: client_secret
+    }
+  end
+
+  def authentication
+    @authentication ||= fetch_authentication_credentials
+  end
+
+  def fetch_authentication_credentials
+    response = Net::HTTP.post_form(authentication_url, authentication_params)
+    JSON.parse(response.body)
   end
 
   def faye
-    @faye ||= Faye::Client.new(@instance_url).tap do |client|
-      client.set_header "Authorization", "OAuth #{@access_token}"
+    @faye ||= Faye::Client.new(instance_url).tap do |client|
+      client.set_header "Authorization", "OAuth #{access_token}"
 
       client.add_extension Streamforce::Extension::Replay.new
       client.add_extension Streamforce::Extension::SubscriptionTracking.new
