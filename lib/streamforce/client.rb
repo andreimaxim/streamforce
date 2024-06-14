@@ -62,8 +62,16 @@ class Streamforce::Client
   def subscribe_to_channels(client, channels, &blk)
     return if channels.empty?
 
-    client
-      .subscribe(channels.shift, &blk)
+    # Subscribe to a single channel, otherwise Salesforce will return a 403 Unknown Client error
+    subscription = client.subscribe(channels.shift)
+
+    # Allow clients to receive [ channel, message ] block params
+    subscription.with_channel(&blk)
+
+    # Continue subscribing to the rest of the channels, regadless of the current subscription
+    # status
+    subscription
       .callback { subscribe_to_channels(client, channels, &blk) }
+      .errback { subscribe_to_channels(client, channels, &blk) }
   end
 end
