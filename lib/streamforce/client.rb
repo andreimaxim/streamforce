@@ -50,7 +50,7 @@ class Streamforce::Client
   end
 
   def faye
-    @faye ||= Faye::Client.new(instance_url).tap do |client|
+    @faye ||= Faye::Client.new("#{instance_url}/cometd/#{api_version}").tap do |client|
       client.set_header "Authorization", "OAuth #{access_token}"
 
       client.add_extension Streamforce::Extension::Replay.new
