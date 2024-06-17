@@ -11,12 +11,8 @@ class Streamforce::Client
     @security_token = opts.fetch(:security_token, ENV["SALESFORCE_SECURITY_TOKEN"])
     @api_version    = opts.fetch(:api_version, ENV["SALESFORCE_API_VERSION"])
 
-    if opts.key?(:logger)
-      @logger = opts[:logger]
-    else
-      @logger = Logger.new($stdout)
-      @logger.level = opts.fetch(:log_level, Logger::WARN)
-    end
+    @logger = opts.fetch(:logger, Logger.new($stdout))
+    @logger.level = ENV.fetch("STREAMFORCE_LOG_LEVEL", Logger::INFO)
   end
 
   def subscribe(channels = [], &blk)
