@@ -10,6 +10,8 @@ class Streamforce::Client
     @client_secret  = opts.fetch(:client_secret, ENV["SALESFORCE_CLIENT_SECRET"])
     @security_token = opts.fetch(:security_token, ENV["SALESFORCE_SECURITY_TOKEN"])
     @api_version    = opts.fetch(:api_version, ENV["SALESFORCE_API_VERSION"])
+
+    @logger = opts.fetch(:logger, Logger.new($stdout))
   end
 
   def subscribe(channels = [], &blk)
@@ -54,8 +56,7 @@ class Streamforce::Client
       client.set_header "Authorization", "OAuth #{access_token}"
 
       client.add_extension Streamforce::Extension::Replay.new
-      client.add_extension Streamforce::Extension::SubscriptionTracking.new
-      client.add_extension Streamforce::Extension::Logging.new
+      client.add_extension Streamforce::Extension::Logging.new(@logger)
     end
   end
 
