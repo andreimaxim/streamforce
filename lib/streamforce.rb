@@ -6,9 +6,7 @@ require "uri"
 require "net/http"
 require "logger"
 require "json"
-require "base64"
 
-require "active_support"
 require "faye"
 require "relaxed_cookiejar"
 

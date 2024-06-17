@@ -2,8 +2,8 @@
 
 require "test_helper"
 
-class TestStreamforce < ActiveSupport::TestCase
-  test "host defaults to SALESFORCE_HOST env var or is set during initialization" do
+class TestStreamforce < Minitest::Test
+  def test_host_setup
     env_host = "test.salesforce.com"
     init_host = "login.salesforce.com"
 
@@ -16,7 +16,7 @@ class TestStreamforce < ActiveSupport::TestCase
     assert_equal init_host, init_client.host
   end
 
-  test "username defaults to SALESFORCE_USERNAME env var or is set during initialization" do
+  def test_username_setup
     env_username = "1234"
     init_username = "abcd"
 
@@ -29,7 +29,7 @@ class TestStreamforce < ActiveSupport::TestCase
     assert_equal init_username, init_client.username
   end
 
-  test "password defaults to SALESFORCE_PASSWORD env var or is set during initialization" do
+  def test_password_setup
     env_password = "1234"
     init_password = "abcd"
 
@@ -42,7 +42,7 @@ class TestStreamforce < ActiveSupport::TestCase
     assert_equal init_password, init_client.password
   end
 
-  test "client_id defaults to SALESFORCE_CLIENT_ID env var or is set during initialization" do
+  def test_client_id_setup
     env_client_id = "1234"
     init_client_id = "abdc"
 
@@ -55,7 +55,7 @@ class TestStreamforce < ActiveSupport::TestCase
     assert_equal init_client_id, init_client.client_id
   end
 
-  test "client_secret defaults to SALESFORCE_CLIENT_SECRET env var or is set during initialization" do
+  def test_client_secret_setup
     env_client_secret = "1234"
     init_client_secret = "abcd"
 
@@ -68,7 +68,7 @@ class TestStreamforce < ActiveSupport::TestCase
     assert_equal init_client_secret, init_client.client_secret
   end
 
-  test "security_token defaults to SALESFORCE_SECURITY_TOKEN env var or is set during initialization" do
+  def test_security_token_setup
     env_security_token = "1234"
     init_security_token = "1234"
 
@@ -81,7 +81,7 @@ class TestStreamforce < ActiveSupport::TestCase
     assert_equal init_security_token, init_client.security_token
   end
 
-  test "api_version defaults to SALESFORCE_API_VERSION env var or is set during initialization" do
+  def test_api_version_setup
     env_api_version = "61.0"
     init_api_version = "58.0"
 

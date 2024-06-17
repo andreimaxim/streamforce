@@ -30,11 +30,9 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = [ "lib" ]
 
-  spec.add_dependency "base64"
   spec.add_dependency "zeitwerk"
   spec.add_dependency "faye"
   spec.add_dependency "relaxed_cookiejar"
-  spec.add_dependency "activesupport"
   spec.add_dependency "redis"
 
   spec.add_development_dependency "rake", "~> 13.0"
