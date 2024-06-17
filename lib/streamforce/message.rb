@@ -34,7 +34,7 @@ class Streamforce::Message
   def data
     @payload["data"]
   end
-  
+
   def subscription
     @payload["subscription"]
   end

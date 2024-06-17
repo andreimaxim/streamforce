@@ -61,13 +61,12 @@ class Streamforce::Extension::Logging
     replay_id = message.replay_id
 
     replay_info = if replay_id == -1
-                    "for all new messages"
-                  elsif replay_id == -2
-                    "and requesting all stored messages"
-
-                  else
-                    "and requesting all messages newer than ##{replay_id}"
-                  end
+      "for all new messages"
+    elsif replay_id == -2
+      "and requesting all stored messages"
+    else
+      "and requesting all messages newer than ##{replay_id}"
+    end
 
     info message, "Subscribing to #{message.subscription} #{replay_info}"
   end

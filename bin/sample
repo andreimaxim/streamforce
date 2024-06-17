@@ -4,9 +4,13 @@
 require "bundler/setup"
 require "streamforce"
 
-client = Streamforce::Client.new
+require "active_support/tagged_logging"
+
+tagged_logger = ActiveSupport::TaggedLogging.new(Logger.new($stdout))
+
+client = Streamforce::Client.new logger: tagged_logger.tagged("Streamforce")
 subscriptions = ENV["SALESFORCE_SUBSCRIPTIONS"].split(",")
 
 client.subscribe(subscriptions) do |subscription, message|
-  puts "[Client log][#{subscription}]: #{message.inspect}"
+  tagged_logger.tagged("Client", subscription).info "#{message.inspect}"
 end
