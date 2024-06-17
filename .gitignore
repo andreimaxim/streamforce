@@ -2,6 +2,7 @@
 /.env
 /.yardoc
 /_yardoc/
+/bin/run
 /coverage/
 /doc/
 /Gemfile.lock
