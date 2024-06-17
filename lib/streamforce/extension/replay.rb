@@ -19,16 +19,15 @@ class Streamforce::Extension::Replay
     return callback.call(message) unless message["channel"] == "/meta/subscribe"
 
     channel = message["subscription"]
-    message["ext"] = { replay: { channel => replay_id(channel).to_i } }
+    message["ext"] = { "replay" => { channel => replay_id(channel).to_i } }
 
     callback.call(message)
   end
 
-  # [/topic/fws-role]: {"event"=>{"createdDate"=>"2024-06-14T11:33:34.616Z", "replayId"=>236503, "type"=>"created"}
   def store(channel, replay_id)
     return if channel.nil? || replay_id.nil?
 
-    @redis.set channel, replay_id
+    @redis.set channel, replay_id, ex: 86400
   end
 
   def replay_id(channel)
