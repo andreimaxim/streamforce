@@ -1,45 +1,22 @@
 # Streamforce
 
-In most cases, processing events received from the Salesforce Streaming API can be
+In most cases, consuming events received from the Salesforce Streaming API can be
 broken down into three very specific steps:
 
-1. Connecting to the Salesforce API and listening for messaging
+1. Connecting to the Salesforce API and listening for messages
 2. Ingesting received messages into some sort of internal event bus (e.g. RabbitMQ,
    Kafka, Redis, etc)
 3. Processing the stored messages
 
-Streamforce aims to handle #1 and simplify the work done for #2.
-
-[Restforce](https://github.com/restforce/restforce) provides a simple API to connect
-to the Streaming API and consume messages:
-
-```ruby
-# Restforce uses faye as the underlying implementation for CometD.
-require 'faye'
-
-# Initialize a client with your username/password/oauth token/etc.
-client = Restforce.new(username: 'foo',
-                       password: 'bar',
-                       security_token: 'security token',
-                       client_id: 'client_id',
-                       client_secret: 'client_secret')
-
-EM.run do
-  # Subscribe to the PushTopic.
-  client.subscription '/topic/AllAccounts' do |message|
-    puts message.inspect
-  end
-end
-```
-
-However, the above code is usable in a production environment because:
+Streamforce aims to be an abstraction for the first step, by implementing some of the
+common tasks that need to be performed by any well-behaved client:
 
 * The interactions with the Streaming API need to be logged using the correct severity
   (e.g. handshakes should use `Logger::DEBUG` while subscription errors should use
   `Logger::ERROR` for better visibility)
 * Replay IDs need to be stored using a persistent storage like Redis and not in-memory
 
-Streamforce comes with all the batteries included.
+As an alternative, checkout [Restforce](https://github.com/restforce/restforce).
 
 ## Usage
 
