@@ -5,36 +5,36 @@ class Streamforce::Extension::Logging
 
   def incoming(payload, callback)
     message = Streamforce::Message.new(payload)
-    log_incoming_message(message)
+
+    case message.channel
+    when "/meta/handshake"
+      log_incoming_handshake(message)
+    when "/meta/connect"
+      log_incoming_connect(message)
+    when "/meta/subscribe"
+      log_incoming_subscribe(message)
+    else
+      @logger.debug "[#{message.channel}] #{message.data}"
+    end
 
     callback.call(payload)
   end
 
   def outgoing(payload, callback)
     message = Streamforce::Message.new(payload)
-    log_outgoing_message(message)
+
+    case message.channel
+    when "/meta/handshake"
+      @logger.debug "[Client] Handshake requested..."
+    when "/meta/connect"
+      debug message, "Sending connection request"
+    when "/meta/subscribe"
+      log_outgoing_subscribe(message)
+    else
+      @logger.debug "[#{message.channel}] #{message.data}"
+    end
 
     callback.call(payload)
-  end
-
-  def log_incoming_message(message)
-    if message.channel_type == "meta"
-      public_send("log_incoming_#{message.channel_name}", message)
-    else
-      @logger.debug "[#{message.channel_name}] #{message.data}"
-    end
-  end
-
-  def log_outgoing_message(message)
-    if message.channel_type == "meta"
-      public_send("log_outgoing_#{message.channel_name}", message)
-    else
-      @logger.debug "[#{message.channel_name}] #{message.data}"
-    end
-  end
-
-  def log_outgoing_handshake(message)
-    @logger.debug "[Client] Handshake requested..."
   end
 
   def log_incoming_handshake(message)
@@ -43,10 +43,6 @@ class Streamforce::Extension::Logging
     else
       @logger.error "[Server] Connection was refused: #{message.error_message}"
     end
-  end
-
-  def log_outgoing_connect(message)
-    debug message, "Sending connection request"
   end
 
   def log_incoming_connect(message)
@@ -60,9 +56,9 @@ class Streamforce::Extension::Logging
   def log_outgoing_subscribe(message)
     replay_id = message.replay_id
 
-    replay_info = if replay_id == -1
+    replay_info = if message.no_replay?
       "for all new messages"
-    elsif replay_id == -2
+    elsif message.replay_available_messages?
       "and requesting all stored messages"
     else
       "and requesting all messages newer than ##{replay_id}"

@@ -3,8 +3,8 @@ class Streamforce::Message
     @payload = payload
   end
 
-  def success?
-    @payload["successful"]
+  def client_id
+    @payload["clientId"]
   end
 
   def id
@@ -19,16 +19,16 @@ class Streamforce::Message
     @payload["channel"]
   end
 
-  def client_id
-    @payload["clientId"]
-  end
-
   def channel_type
     channel.split("/")[1]
   end
 
   def channel_name
     channel.split("/")[2]
+  end
+
+  def success?
+    @payload["successful"]
   end
 
   def data
@@ -41,6 +41,18 @@ class Streamforce::Message
 
   def subscription?
     channel == "/meta/subscribe"
+  end
+
+  def replay_from_message?
+    replay_id && replay_id != -1 && replay_id != -2
+  end
+
+  def replay_available_messages?
+    replay_id == -2
+  end
+
+  def no_replay?
+    replay_id.nil? || replay_id == -1
   end
 
   def error_message
